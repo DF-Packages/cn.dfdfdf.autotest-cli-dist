@@ -1,0 +1,46 @@
+name: Validate dist repository
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            shell: bash
+          - os: windows-2022
+            shell: pwsh
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate package metadata
+        shell: ${{ matrix.shell }}
+        run: node -e "const p=require('./package.json'); if(p.name !== 'cn.dfdfdf.autotest-cli-dist' || p.relatedPackages == null) process.exit(1)"
+
+      - name: Parse shell installer
+        if: runner.os != 'Windows'
+        shell: bash
+        run: bash -n scripts/install.sh
+
+      - name: Parse PowerShell installer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            (Resolve-Path 'scripts/install.ps1'),
+            [ref]$tokens,
+            [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | Format-List | Out-String | Write-Error
+            exit 1
+          }

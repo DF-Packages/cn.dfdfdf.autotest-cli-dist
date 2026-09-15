@@ -1,0 +1,21 @@
+{
+  "name": "cn.dfdfdf.autotest-cli-dist",
+  "displayName": "DF.AutoTestCLIDist",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "category": "Testing",
+  "description": "Public distribution metadata and installers for DF AutoTest CLI release binaries.",
+  "license": "MIT",
+  "author": {
+    "name": "aman-jun"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DF-Packages/cn.dfdfdf.autotest-cli-dist.git"
+  },
+  "relatedPackages": {},
+  "dependencies": {},
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@DF-Packages"
+  }
+}
